@@ -1,0 +1,35 @@
+{
+  "name": "mcp-google-sheets",
+  "version": "1.0.0",
+  "description": "MCP server for Google Sheets - read and write spreadsheet data",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js --watch . --ext js,json",
+    "test": "node test-client.js",
+    "test:service": "node test-service-account.js",
+    "test:mcp": "node test-mcp-tools.js"
+  },
+  "keywords": [
+    "mcp",
+    "google-sheets",
+    "spreadsheet",
+    "integration",
+    "workflow",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "dotenv": "^16.3.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

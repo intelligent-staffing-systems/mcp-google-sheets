@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-google-sheets": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["index.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
