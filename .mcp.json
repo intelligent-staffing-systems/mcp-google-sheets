@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "mcp-google-sheets": {
+    "mcp-sheets": {
       "type": "stdio",
       "command": "node",
       "args": ["index.js"],

@@ -33,7 +33,7 @@ const sheetsClient = new GoogleSheetsClient({
 
 // Initialize MCP Server
 const server = new McpServer({
-  name: 'mcp-google-sheets',
+  name: 'mcp-sheets',
   version: '1.0.0'
 });
 

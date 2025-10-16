@@ -1,5 +1,5 @@
 {
-  "name": "mcp-google-sheets",
+  "name": "mcp-sheets",
   "version": "1.0.0",
   "description": "MCP server for Google Sheets - read and write spreadsheet data",
   "main": "index.js",
