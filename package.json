@@ -9,7 +9,8 @@
     "dev": "nodemon index.js --watch . --ext js,json",
     "test": "node test-client.js",
     "test:service": "node test-service-account.js",
-    "test:mcp": "node test-mcp-tools.js"
+    "test:mcp": "node test-mcp-tools.js",
+    "test:new": "node test-new-tools.js"
   },
   "keywords": [
     "mcp",

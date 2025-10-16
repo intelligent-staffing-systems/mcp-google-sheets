@@ -6,7 +6,9 @@ An MCP (Model Context Protocol) server that enables AI assistants to interact wi
 
 - **Get Spreadsheet Metadata**: Retrieve information about a spreadsheet including title, URL, and sheets
 - **List Sheets**: Get all sheets (tabs) in a spreadsheet
+- **Find Sheet by GID**: Look up a sheet directly using its gid from the URL
 - **Read Values**: Read cell values from any range using A1 notation
+- **Read Formulas**: Read cell formulas instead of calculated values
 - **Batch Read**: Read multiple ranges at once for efficiency
 - **Update Values**: Write data to specific ranges
 - **Append Values**: Add new rows to the end of a sheet
@@ -199,6 +201,48 @@ Append new rows to a sheet
   ]
 }
 ```
+
+### `get_sheet_by_gid`
+Find a specific sheet by its gid (sheet ID from the URL)
+
+**Parameters:**
+- `spreadsheet_id` (required): The spreadsheet ID
+- `gid` (required): The gid from the URL (e.g., gid=241635364)
+
+**Example:**
+```javascript
+{
+  spreadsheet_id: "1TmPs7UJCKAP6DiiJcVq3W2z6P7LJImrSeEjnI-2TAGc",
+  gid: 241635364
+}
+```
+
+**Use Case:**
+When you have a Google Sheets URL like:
+```
+https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit?gid=241635364#gid=241635364
+```
+You can use this tool to find the sheet name and metadata directly from the gid parameter.
+
+### `get_formulas`
+Read formulas from a range (convenience wrapper)
+
+**Parameters:**
+- `spreadsheet_id` (required): The spreadsheet ID
+- `range` (required): A1 notation (e.g., "Sheet1!A1:B10")
+
+**Example:**
+```javascript
+{
+  spreadsheet_id: "1TmPs7UJCKAP6DiiJcVq3W2z6P7LJImrSeEjnI-2TAGc",
+  range: "Sheet1!F9:H12"
+}
+```
+
+**Returns:**
+Cells containing formulas will be returned as formula strings (e.g., "=SUM(A1:A10)") instead of their calculated values.
+
+**Note:** This is a convenience wrapper for `get_values` with `value_render_option: 'FORMULA'`.
 
 ## A1 Notation Guide
 

@@ -47,5 +47,47 @@ export const sheetHandlers = {
     }
 
     return await client.listSheets(args.spreadsheet_id);
+  },
+
+  /**
+   * Get a specific sheet by its gid (sheetId)
+   * @param {GoogleSheetsClient} client
+   * @param {Object} args
+   * @param {string} args.spreadsheet_id - The spreadsheet ID
+   * @param {number} args.gid - The sheet gid (from URL)
+   * @returns {Promise<MCPResponse<{title: string, sheetId: number, index: number, rowCount: number, columnCount: number}>>}
+   */
+  async getSheetByGid(client, args) {
+    if (!args.spreadsheet_id) {
+      return {
+        success: false,
+        error: 'spreadsheet_id is required'
+      };
+    }
+
+    if (args.gid === undefined || args.gid === null) {
+      return {
+        success: false,
+        error: 'gid is required'
+      };
+    }
+
+    const sheetsResult = await client.listSheets(args.spreadsheet_id);
+    if (!sheetsResult.success) {
+      return sheetsResult;
+    }
+
+    const sheet = sheetsResult.data.find(s => s.sheetId === args.gid);
+    if (!sheet) {
+      return {
+        success: false,
+        error: `Sheet with gid ${args.gid} not found`
+      };
+    }
+
+    return {
+      success: true,
+      data: sheet
+    };
   }
 };

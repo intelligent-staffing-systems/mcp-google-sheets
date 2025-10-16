@@ -192,6 +192,52 @@ server.registerTool(
   }
 );
 
+// Get Sheet by GID tool
+server.registerTool(
+  'get_sheet_by_gid',
+  {
+    description: 'Find a specific sheet by its gid (from the URL). Example: gid=241635364 from the URL parameter',
+    inputSchema: {
+      spreadsheet_id: z.string().describe('The ID of the spreadsheet'),
+      gid: z.number().describe('The gid of the sheet (from URL parameter, e.g., gid=241635364)')
+    }
+  },
+  async (args) => {
+    const result = await sheetHandlers.getSheetByGid(sheetsClient, args);
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+// Get Formulas tool
+server.registerTool(
+  'get_formulas',
+  {
+    description: 'Read formulas from a range in a Google Sheet (convenience tool that returns formulas instead of values)',
+    inputSchema: {
+      spreadsheet_id: z.string().describe('The ID of the spreadsheet'),
+      range: z.string().describe('The range to read in A1 notation (e.g., "Sheet1!A1:B10")')
+    }
+  },
+  async (args) => {
+    const result = await valueHandlers.getFormulas(sheetsClient, args);
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
 /**
  * Start the server
  */

@@ -163,5 +163,37 @@ export const valueHandlers = {
         valueInputOption: args.value_input_option
       }
     );
+  },
+
+  /**
+   * Get formulas from a range (convenience wrapper for get_values with FORMULA option)
+   * @param {GoogleSheetsClient} client
+   * @param {Object} args
+   * @param {string} args.spreadsheet_id - The spreadsheet ID
+   * @param {string} args.range - A1 notation range (e.g., "Sheet1!A1:B10")
+   * @returns {Promise<MCPResponse<ValueRange>>}
+   */
+  async getFormulas(client, args) {
+    if (!args.spreadsheet_id) {
+      return {
+        success: false,
+        error: 'spreadsheet_id is required'
+      };
+    }
+
+    if (!args.range) {
+      return {
+        success: false,
+        error: 'range is required (e.g., "Sheet1!A1:B10")'
+      };
+    }
+
+    return await client.getValues(
+      args.spreadsheet_id,
+      args.range,
+      {
+        valueRenderOption: 'FORMULA'
+      }
+    );
   }
 };
