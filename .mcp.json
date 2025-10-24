@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "mcp-sheets": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["src/index.js"],
+      "env": {
+        "NODE_ENV": "production",
+        "LOG_LEVEL": "info"
+      }
+    }
+  }
+}

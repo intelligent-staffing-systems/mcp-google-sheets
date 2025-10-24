@@ -1,0 +1,36 @@
+{
+  "name": "mcp-sheets",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for Google Sheets API",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "mcp-sheets": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "google-sheets",
+    "sheets-api",
+    "ai",
+    "llm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "googleapis": "^144.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
