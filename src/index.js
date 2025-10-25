@@ -8,6 +8,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 import { createSheetsClient } from './client/sheets-client.js';
 import { createLogger } from './utils/logger.js';
 import { getAllToolDefinitions, handleToolCall } from './tools/index.js';
@@ -62,8 +63,15 @@ async function main() {
     server.tool(
       tool.name,
       tool.description,
-      tool.inputSchema,
+      zodToJsonSchema(tool.inputSchema),
       async (args) => {
+        // DEBUG: Log what we actually receive
+        logger.info('Tool called', {
+          toolName: tool.name,
+          receivedArgs: JSON.stringify(args),
+          argKeys: Object.keys(args || {}),
+        });
+
         try {
           const result = await handleToolCall(tool.name, args, sheetsClient);
           return result;
