@@ -50,13 +50,12 @@ export function getToolDefinitions() {
       description:
         'Get a specific sheet by its gid (sheet ID from URL). ' +
         'When user pastes a Google Sheets URL with gid, use this FIRST to find the sheet name and details. ' +
-        'Returns sheet name, size, and basic info. Then you can use other tools with the sheet name.',
+        'Returns sheet name, size, and basic info. Then you can use other tools with the sheet name. ' +
+        'IMPORTANT: Provide EITHER spreadsheetId OR url parameter (both contain the same value).',
       inputSchema: z.object({
         spreadsheetId: z.string().optional().describe('Spreadsheet ID or full Google Sheets URL'),
         url: z.string().optional().describe('Alternative: Full Google Sheets URL (use either spreadsheetId or url)'),
         gid: z.string().optional().describe('Sheet ID (gid from URL, e.g., "1850828774"). If URL contains gid, this is optional.'),
-      }).refine(data => data.spreadsheetId || data.url, {
-        message: "Either spreadsheetId or url must be provided"
       }),
     },
     {

@@ -60,10 +60,16 @@ async function main() {
   logger.info('Registering tools', { count: tools.length });
 
   for (const tool of tools) {
+    // Convert Zod schema to JSON Schema for MCP SDK
+    const jsonSchema = zodToJsonSchema(tool.inputSchema, {
+      name: tool.name,
+      $refStrategy: 'none',
+    });
+
     server.tool(
       tool.name,
       tool.description,
-      zodToJsonSchema(tool.inputSchema),
+      jsonSchema,
       async (args) => {
         // DEBUG: Log what we actually receive
         logger.info('Tool called', {
