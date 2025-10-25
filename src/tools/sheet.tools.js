@@ -129,7 +129,29 @@ export async function handleToolCall(name, args, sheetsClient) {
 
   // GET-SHEET-BY-GID
   if (name === 'get-sheet-by-gid') {
-    let { spreadsheetId, gid } = parseSpreadsheetInput(args.spreadsheetId);
+    // Handle both URL and separate ID+gid parameters
+    let spreadsheetId, gid;
+
+    // Check if spreadsheetId was provided
+    if (!args.spreadsheetId) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text:
+              `❌ **Missing spreadsheet ID**\n\n` +
+              `Please provide either:\n` +
+              `1. A full Google Sheets URL with gid\n` +
+              `2. A spreadsheet ID plus gid parameter`,
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    const parsed = parseSpreadsheetInput(args.spreadsheetId);
+    spreadsheetId = parsed.spreadsheetId;
+    gid = parsed.gid;
 
     // If gid not in URL, use the provided gid argument
     if (!gid && args.gid) {
@@ -145,7 +167,8 @@ export async function handleToolCall(name, args, sheetsClient) {
               `❌ **No gid provided**\n\n` +
               `Please provide either:\n` +
               `1. A URL with gid: https://docs.google.com/spreadsheets/d/{ID}/edit?gid={GID}\n` +
-              `2. Or specify gid as a parameter`,
+              `2. Or specify gid as a parameter\n\n` +
+              `Received: spreadsheetId="${args.spreadsheetId}", gid="${args.gid}"`,
           },
         ],
         isError: true,
