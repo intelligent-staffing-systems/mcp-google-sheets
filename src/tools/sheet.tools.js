@@ -52,8 +52,11 @@ export function getToolDefinitions() {
         'When user pastes a Google Sheets URL with gid, use this FIRST to find the sheet name and details. ' +
         'Returns sheet name, size, and basic info. Then you can use other tools with the sheet name.',
       inputSchema: z.object({
-        spreadsheetId: z.string().describe('Spreadsheet ID or full Google Sheets URL'),
+        spreadsheetId: z.string().optional().describe('Spreadsheet ID or full Google Sheets URL'),
+        url: z.string().optional().describe('Alternative: Full Google Sheets URL (use either spreadsheetId or url)'),
         gid: z.string().optional().describe('Sheet ID (gid from URL, e.g., "1850828774"). If URL contains gid, this is optional.'),
+      }).refine(data => data.spreadsheetId || data.url, {
+        message: "Either spreadsheetId or url must be provided"
       }),
     },
     {
@@ -132,8 +135,11 @@ export async function handleToolCall(name, args, sheetsClient) {
     // Handle both URL and separate ID+gid parameters
     let spreadsheetId, gid;
 
-    // Check if spreadsheetId was provided
-    if (!args.spreadsheetId) {
+    // Accept both 'spreadsheetId' and 'url' parameter names (AI sometimes uses either)
+    const inputId = args.spreadsheetId || args.url;
+
+    // Check if any ID was provided
+    if (!inputId) {
       return {
         content: [
           {
@@ -142,14 +148,15 @@ export async function handleToolCall(name, args, sheetsClient) {
               `❌ **Missing spreadsheet ID**\n\n` +
               `Please provide either:\n` +
               `1. A full Google Sheets URL with gid\n` +
-              `2. A spreadsheet ID plus gid parameter`,
+              `2. A spreadsheet ID plus gid parameter\n\n` +
+              `Received args: ${JSON.stringify(args)}`,
           },
         ],
         isError: true,
       };
     }
 
-    const parsed = parseSpreadsheetInput(args.spreadsheetId);
+    const parsed = parseSpreadsheetInput(inputId);
     spreadsheetId = parsed.spreadsheetId;
     gid = parsed.gid;
 
