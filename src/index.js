@@ -8,7 +8,6 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { zodToJsonSchema } from 'zod-to-json-schema';
 import { createSheetsClient } from './client/sheets-client.js';
 import { createLogger } from './utils/logger.js';
 import { getAllToolDefinitions, handleToolCall } from './tools/index.js';
@@ -60,16 +59,13 @@ async function main() {
   logger.info('Registering tools', { count: tools.length });
 
   for (const tool of tools) {
-    // Convert Zod schema to JSON Schema for MCP SDK
-    const jsonSchema = zodToJsonSchema(tool.inputSchema, {
-      name: tool.name,
-      $refStrategy: 'none',
-    });
-
-    server.tool(
+    // Use registerTool with the correct schema format (Zod shape, not z.object)
+    server.registerTool(
       tool.name,
-      tool.description,
-      jsonSchema,
+      {
+        description: tool.description,
+        inputSchema: tool.inputSchema.shape, // Use .shape to get the raw Zod object
+      },
       async (args) => {
         // DEBUG: Log what we actually receive
         logger.info('Tool called', {
