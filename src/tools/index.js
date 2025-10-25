@@ -6,6 +6,8 @@
 
 import * as spreadsheetTools from './spreadsheet.tools.js';
 import * as valuesTools from './values.tools.js';
+import * as sheetTools from './sheet.tools.js';
+import * as searchTools from './search.tools.js';
 
 /**
  * @typedef {import('../types.js').GoogleSheetsClient} GoogleSheetsClient
@@ -13,7 +15,7 @@ import * as valuesTools from './values.tools.js';
  */
 
 // Register all tool modules here
-const toolModules = [spreadsheetTools, valuesTools];
+const toolModules = [spreadsheetTools, valuesTools, sheetTools, searchTools];
 
 /**
  * Get all tool definitions from all modules

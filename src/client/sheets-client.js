@@ -274,6 +274,36 @@ export async function createSheetsClient() {
       return response.data;
     },
 
+    /**
+     * Resolve gid (sheet ID) to sheet name
+     *
+     * @param {string} spreadsheetId - Spreadsheet ID
+     * @param {string} gid - Sheet ID (gid from URL)
+     * @returns {Promise<Object|null>} Sheet info or null if not found
+     */
+    async getSheetByGid(spreadsheetId, gid) {
+      logger.debug('Resolving gid to sheet name', { spreadsheetId, gid });
+
+      const spreadsheet = await this.getSpreadsheet(spreadsheetId, false);
+
+      // Find sheet with matching sheetId
+      const sheet = spreadsheet.sheets?.find(
+        (s) => s.properties?.sheetId?.toString() === gid.toString()
+      );
+
+      if (!sheet) {
+        logger.warn('Sheet not found for gid', { gid });
+        return null;
+      }
+
+      logger.info('Resolved gid to sheet', {
+        gid,
+        sheetName: sheet.properties?.title,
+      });
+
+      return sheet;
+    },
+
     // Expose raw sheets API for advanced usage
     _sheets: sheets,
   };
